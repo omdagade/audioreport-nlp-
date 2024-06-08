@@ -9,12 +9,19 @@ import nltk
 
 def speak():
 
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-
-            audio = r.listen(source)
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+       
+        r.adjust_for_ambient_noise(source, duration=1)
+        print("Listening...")
+        try:
+            audio = r.listen(source, timeout=5, phrase_time_limit=50)
             query = r.recognize_google(audio)
-        return query
+            print("You said: " + query)
+            return query
+        except sr.WaitTimeoutError:
+            print("Listening timed out while waiting for phrase to start")
+        
 
 
 
